@@ -122,21 +122,31 @@ Escribe una función que tome un arreglo de números como parámetro y devuelva 
 // Creando mi priemr carrito de compras.
 
 let usuario = '';
+
 let producto = '';
 let codigoProducto = 0;
 let nombreProducto = '';
 let cantidadProducto = 0;
 let precioProducto = 0;
 let listaProductos = [];
+
 let subTotal = 0;
 let cantidadTotal = 0;
-let seguirComprando = true;
-let finalizarCompra = true;
+let precioFinal = 0;
 
+let metodoPago = '';
+let descuento = 0.85;
+let cantidadCuotas = 0;
+
+let seguirComprando = true;
+
+// Para comenzar le damos la bienvenida al usuario y le pedimos que ingrese su nombre para identificarlo.
+usuario = prompt(`- ¡Bienvenido/a! Para comenzar por favor ingrese un nombre de usuario:`);
 
 do {
     // Le pido al usuario que ingrese le producto deseado por medio de un numero de codigo.
-    producto = parseInt(prompt(`¡Perfecto ${usuario}! Para agregar algun producto, seleccionelo en base a su numero de codigo.
+    producto = parseInt(prompt(`
+    - ¡Perfecto ${usuario}! Para agregar algun producto, seleccionelo en base a su numero de codigo.
     1 - Arroz.
     2 - Leche.
     3 - Azucar.
@@ -176,69 +186,94 @@ do {
             break;
 
         default:
-            alert(`El codigo ingresado no es valido, por favor ingresar nuevamente.`);
+            alert(`- El codigo ingresado no es valido, por favor ingresar nuevamente.`);
             continue;
     };
 
-    // Pedimos al usuario que ingrese la cantidad del producto solicitada y la validamos.
-    cantidadProducto = parseInt(prompt(`Ingrese la cantidad de ${producto} que desea:`));
+    // Pedimos al usuario que ingrese la cantidad del producto requerido y validamos dicho valor.
+    cantidadProducto = parseInt(prompt(`- Ingrese la cantidad de ${nombreProducto} que desea:`));
 
     while (isNaN(cantidadProducto) || cantidadProducto <= 0) {
-        alert(`Por favor ingrese una cantidad valida.`);
-        cantidadProducto = parseInt(prompt(`Ingrese la cantidad de ${producto} que desea:`));
+        alert(`- Por favor ingrese una cantidad valida.`);
+        cantidadProducto = parseInt(prompt(`- Ingrese la cantidad de ${nombreProducto} que desea:`));
     };
 
+    // Le informamos al usuario el valor del producto agregado al carrito y a su vez el precio total actual de su compra.
+    subTotal = precioProducto * cantidadProducto;
+    cantidadTotal += cantidadProducto;
+    precioFinal += subTotal;
+
+    seguirComprando = confirm(`
+    - Has agregado ${cantidadProducto} unidades de ${nombreProducto} por $${subTotal}.
+    - Total actual: $${precioFinal}
 
 
+    - ¿Desea seguir comprando?
+    `);
 
+    if (!seguirComprando) {
+        metodoPago = prompt(`
+        - Has comprado una cantidad total de ${cantidadTotal} productos
+        - Tu subtotal es de $${precioFinal}.
+        
+        - A continuacion elija el metodo de pago.
+        - Escriba "efectivo" para abonar con un 15% de descuento.
+        - Escriba "tdebito" para abonar el precio actual.
+        - Escriba "tcredito" para abonar hasta en 3 cuotas con un 10% de recargo. 
+        `).toUpperCase();
 
+        while (metodoPago !== 'EFECTIVO' && metodoPago !== 'TDEBITO' && metodoPago !== 'TCREDITO') {
 
+            metodoPago = prompt(`
+            - Por favor ingresar un metodo de pago valido.
+            
+            - Escriba "efectivo" para abonar con un 15% de descuento.
+            - Escriba "tdebito" para abonar el precio actual.
+            - Escriba "tcredito" para abonar hasta en 3 cuotas con un 10% de recargo.
+            `).toUpperCase();
+        }
 
+        if (metodoPago === 'EFECTIVO') {
+            precioFinal = ``;
+        } else if (metodoPago === 'TDEBITO') {
+            precioFinal = precioFinal;
+        } else if (metodoPago === 'TCREDITO') {
+            cantidadCuotas = parseInt(prompt(`
+            - Seleccione la cantidad de cuotas: 
+
+            - 1 Cuota = 1 pago de $${precioFinal * 1.10}.
+            - 2 Cuotas = 2 pagos de $${(precioFinal * 1.10) / 2}.
+            - 3 Cuotas = 3 pagos de $${(precioFinal * 1.10) / 3}.
+            `));
+
+            while (isNaN(cantidadCuotas) || cantidadCuotas < 1 || cantidadCuotas > 3) {
+                alert(`- El nro de cuota/s es incorrecto. Ingreselo nuevamente: `);
+                cantidadCuotas = parseInt(prompt(`
+                - Seleccione la cantidad de cuotas: 
+
+                - 1 Cuota = 1 pago de $${precioFinal * 1.10}.
+                - 2 Cuotas = 2 pagos de $${(precioFinal * 1.10) / 2}.
+                - 3 Cuotas = 3 pagos de $${(precioFinal * 1.10) / 3}.
+                `));
+            }
+
+            if ( cantidadCuotas === 1) {
+                precioFinal = `$ ${precioFinal * 1.10}`;
+            } else if (cantidadCuotas === 2) {
+                precioFinal = `2 pagos de $${(precioFinal * 1.10) / 2}`;
+            } else if (cantidadCuotas === 3) {
+                precioFinal = `3 pagos de $${(precioFinal * 1.10) / 3}`;
+            }
+            
+        }
+
+        alert(`
+        - Bueno ${usuario}, ¡Hasta aqui hemos llegado!
+        - Ya puedes dirigirte a la caja para completar tu compra.
+        - El monto total a abonar es de ${precioFinal}.
+
+        - ¡Muchas gracias por confiar en nosotros!
+        - ¡Aguardamos con ansias tu regreso!
+        `)
+    }    
 } while (seguirComprando);
-
-
-
-
-
-            // subTotal += precioProducto * cantidadProducto;
-            // cantidadTotal += cantidadProducto;
-            // seguirComprando = confirm(
-            //     `- Se ha agregado ${cantidadProducto} unidad/es de Arroz ($${precioProducto} x unidad).
-            //     - El subtotal actual es de $${subTotal}.
-            //     - ¿Desea seguir comprando?`
-            // );
-
-
-            // subTotal += precioProducto * cantidadProducto;
-            // cantidadTotal += cantidadProducto;
-            // seguirComprando = confirm(`
-            //     - Se ha agregado ${cantidadProducto} unidad/es de Leche ($${precioProducto} x litro).
-            //     - El subtotal actual es de $${subTotal}.
-            //     - ¿Desea seguir comprando?`
-            // );
-
-            // subTotal += precioProducto * cantidadProducto;
-            // cantidadTotal += cantidadProducto;
-            // seguirComprando = confirm(`
-            //     - Se ha agregado ${cantidadProducto} unidad/es de Azucar ($${precioProducto} x Kg).
-            //     - El subtotal actual es de $${subTotal}.
-            //     - ¿Desea seguir comprando?`
-            // );
-
-
-            // subTotal += precioProducto * cantidadProducto;
-            // cantidadTotal += cantidadProducto;
-            // seguirComprando = confirm(`
-            //     - Se ha agregado ${cantidadProducto} unidad/es de Huevos ($${precioProducto} x maple).
-            //     - El subtotal actual es de $${subTotal}.
-            //     - ¿Desea seguir comprando?`
-            // );
-
-
-            // subTotal += precioProducto * cantidadProducto;
-            // cantidadTotal += cantidadProducto;
-            // seguirComprando = confirm(`
-            //     - Se ha agregado ${cantidadProducto} unidad/es de Dulce de Leche ($${precioProducto} x unidad).
-            //     - El subtotal actual es de $${subTotal}.
-            //     - ¿Desea seguir comprando?`
-            // );
