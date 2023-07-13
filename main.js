@@ -234,16 +234,16 @@ do {
         }
 
         if (metodoPago === 'EFECTIVO') {
-            precioFinal = `$${precioFinal * descuento}`;
+            precioFinal = `$${Math.round(precioFinal * descuento)}`;
         } else if (metodoPago === 'TDEBITO') {
             precioFinal = precioFinal;
         } else if (metodoPago === 'TCREDITO') {
             cantidadCuotas = parseInt(prompt(`
             - Seleccione la cantidad de cuotas: 
 
-            - 1 Cuota = 1 pago de $${precioFinal * 1.10}.
-            - 2 Cuotas = 2 pagos de $${(precioFinal * 1.10) / 2}.
-            - 3 Cuotas = 3 pagos de $${(precioFinal * 1.10) / 3}.
+            - 1 Cuota = 1 pago de $${Math.round(precioFinal * 1.10)}.
+            - 2 Cuotas = 2 pagos de $${Math.round((precioFinal * 1.10) / 2)}.
+            - 3 Cuotas = 3 pagos de $${Math.round((precioFinal * 1.10) / 3)}.
             `));
 
             while (isNaN(cantidadCuotas) || cantidadCuotas < 1 || cantidadCuotas > 3) {
@@ -251,18 +251,18 @@ do {
                 cantidadCuotas = parseInt(prompt(`
                 - Seleccione la cantidad de cuotas: 
 
-                - 1 Cuota = 1 pago de $${precioFinal * 1.10}.
-                - 2 Cuotas = 2 pagos de $${(precioFinal * 1.10) / 2}.
-                - 3 Cuotas = 3 pagos de $${(precioFinal * 1.10) / 3}.
+                - 1 Cuota = 1 pago de $${Math.round(precioFinal * 1.10)}.
+                - 2 Cuotas = 2 pagos de $${Math.round((precioFinal * 1.10) / 2)}.
+                - 3 Cuotas = 3 pagos de $${Math.round((precioFinal * 1.10) / 3)}.
                 `));
             }
 
             if (cantidadCuotas === 1) {
                 precioFinal = `$ ${precioFinal * 1.10}`;
             } else if (cantidadCuotas === 2) {
-                precioFinal = `2 pagos de $${(precioFinal * 1.10) / 2}`;
+                precioFinal = `2 pagos de $${Math.round((precioFinal * 1.10) / 2)}`;
             } else if (cantidadCuotas === 3) {
-                precioFinal = `3 pagos de $${(precioFinal * 1.10) / 3}`;
+                precioFinal = `3 pagos de $${Math.round((precioFinal * 1.10) / 3)}`;
             }
             
         }
