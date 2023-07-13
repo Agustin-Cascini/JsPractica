@@ -234,7 +234,7 @@ do {
         }
 
         if (metodoPago === 'EFECTIVO') {
-            precioFinal = ``;
+            precioFinal = `$${precioFinal * descuento}`;
         } else if (metodoPago === 'TDEBITO') {
             precioFinal = precioFinal;
         } else if (metodoPago === 'TCREDITO') {
@@ -257,7 +257,7 @@ do {
                 `));
             }
 
-            if ( cantidadCuotas === 1) {
+            if (cantidadCuotas === 1) {
                 precioFinal = `$ ${precioFinal * 1.10}`;
             } else if (cantidadCuotas === 2) {
                 precioFinal = `2 pagos de $${(precioFinal * 1.10) / 2}`;
